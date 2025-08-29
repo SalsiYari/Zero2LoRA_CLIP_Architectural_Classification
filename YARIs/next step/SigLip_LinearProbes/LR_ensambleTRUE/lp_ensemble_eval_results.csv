@@ -1,0 +1,2 @@
+Timestamp,Model,Pretrained,Scenario,Techniques,Top-1 Acc,Macro-F1,Top-5 Acc,Balanced Acc,Classes,Batch size
+2025-08-27T14:02:39.976796,ViT-L-16-SigLIP2-384,webli,Linear probe + Zero-shot ensemble (valid),"LR[lbfgs/l2/multinomial], α=0.5, 21 prompts",0.8049,0.8032,0.9867,0.8042,25,64
