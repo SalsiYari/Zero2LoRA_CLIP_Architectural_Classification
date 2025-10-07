@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-CLIP + Prompt Learning & Prompt Ensemble su template forniti
+CLIP + Prompt Learning & PROMPT ENSAMBLE su template forniti
 -> Dataset: torchvision.datasets.ImageFolder (cartelle = classi)
 -> Prompt learning: impara pesi sui template (globali o per-classe)
 -> Prompt ensemble: uniform (media semplice) o learned (pesi appresi)
