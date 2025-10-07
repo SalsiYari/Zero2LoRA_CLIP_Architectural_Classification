@@ -1,12 +1,8 @@
 # =========================================================
-# CoOp (Context Optimization) per OpenCLIP — HPC Ready
-# Dataset: ImageFolder (usa TUTTO il train, con opzione tiny-overfit)
-# Con barre di caricamento (tqdm) per training ed evaluation
+# CoOp per OpenCLIP —
+# Dataset: ImageFolder (usa TUTTO il train, con opzione tiny-overfit, guarda commenti sotto)
 # =========================================================
 '''
-NOTE!!
-Se lo lanci interattivo con srun, vedi tutto nel terminale (puoi fare python coop.py ... | tee run.log per salvarlo).
-Se lo lanci con sbatch, i log vanno nei file indicati da SLURM (--output/--error). Nel mio esempio erano logs/%x_%j.out e logs/%x_%j.err.
 
 Default principali
 --model ViT-B-32
@@ -19,13 +15,6 @@ Workers: --num-workers 0 → auto: usa SLURM_CPUS_PER_TASK (altrimenti 2)
 AMP: attivo (disattivi con --no-amp)
 Tiny-overfit di debug: disattivo (attivi con --limit-train N --epochs-overfit E)
 tqdm: attivo (disattivi con --no-tqdm)
-
-Con ViT-B/32, immagini 224px, modello gelato e solo prompt che impara:
-8 GB → funziona con --batch-train 16–32
-11–12 GB → --batch-train 32–64
-16 GB (consigliato) → --batch-train 64–128 comodo
-24 GB → --batch-train 128–256 sereno
-48 GB → batch molto grandi
 
 '''
 import os
@@ -378,7 +367,7 @@ def encode_text_with_embeddings_train(
 
 
 # =========================================================
-# Valutazione (dtype allineati) con progress bar
+# Valutazione (dtype allineati)
 # =========================================================
 
 '''valuta il modello con i text_features dati (zero-shot o CoOp) ritornando un dizionario con top1 e macro_f1'''
@@ -434,7 +423,7 @@ def evaluate(
 
 
 # ==================================================================================================================
-# Training loop (CoOp) con AMP + GradScaler + progress bar
+# Training loop (CoOp) con AMP + GradScaler 
 # ==================================================================================================================
 
 def train_coop(
