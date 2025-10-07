@@ -1,0 +1,45 @@
+[--INFO--] Esecuzione 
+[INFO] QUICK TEST attivo: uso ViT-B-32 per velocità.
+[INFO] Inizio: 2025-10-06 11:16:22
+[INFO] device=cuda
+[INFO] Carico OpenCLIP: ViT-B-32 (openai)
+[INFO] classi (25): ['Achaemenid', 'American Foursquare', 'American craftsman style', 'Ancient Egyptian', 'Art Deco', 'Art Nouveau', 'Baroque', 'Bauhaus', 'Beaux Arts', 'Byzantine', 'Chicago school', 'Colonial', 'Deconstructivism', 'Edwardian', 'Georgian', 'Gothic', 'Greek Revival', 'International style', 'Novelty', 'Palladian', 'Postmodern', 'Queen Anne', 'Romanesque', 'Russian Revival', 'Tudor Revival']
+
+[BASELINE] Zero-shot su valid/test...
+[ZERO-SHOT] val_top1=0.4101  val_macroF1=0.3718
+[ZERO-SHOT] test_top1=0.3952  test_macroF1=0.3661
+
+[LoRA] Iniezione: r=8, alpha=16, dropout=0.0, target=mlp
+[LoRA] Trainable LoRA params: 737,280 / 152,014,593 (0.485%)
+
+[LoRA] Training...
+[Epoch 01] train_loss=1.0750  val_top1=0.7324  val_macroF1=0.7276
+[Epoch 02] train_loss=0.5689  val_top1=0.7790  val_macroF1=0.7748
+[Epoch 03] train_loss=0.3814  val_top1=0.7403  val_macroF1=0.7346
+[Epoch 04] train_loss=0.2866  val_top1=0.7656  val_macroF1=0.7594
+[Epoch 05] train_loss=0.2422  val_top1=0.7603  val_macroF1=0.7569
+[Epoch 06] train_loss=0.2044  val_top1=0.7583  val_macroF1=0.7540
+[Epoch 07] train_loss=0.1973  val_top1=0.7583  val_macroF1=0.7546
+[Epoch 08] train_loss=0.1905  val_top1=0.7503  val_macroF1=0.7422
+[Epoch 09] train_loss=0.1666  val_top1=0.7490  val_macroF1=0.7438
+[Epoch 10] train_loss=0.1711  val_top1=0.7590  val_macroF1=0.7546
+[Epoch 11] train_loss=0.1556  val_top1=0.7590  val_macroF1=0.7524
+[Epoch 12] train_loss=0.1470  val_top1=0.7563  val_macroF1=0.7507
+[Epoch 13] train_loss=0.1420  val_top1=0.7423  val_macroF1=0.7399
+[Epoch 14] train_loss=0.1393  val_top1=0.7417  val_macroF1=0.7348
+[Epoch 15] train_loss=0.1401  val_top1=0.7157  val_macroF1=0.7078
+[Epoch 16] train_loss=0.1433  val_top1=0.7390  val_macroF1=0.7339
+[Epoch 17] train_loss=0.1378  val_top1=0.7290  val_macroF1=0.7214
+[Epoch 18] train_loss=0.1348  val_top1=0.7383  val_macroF1=0.7311
+[Epoch 19] train_loss=0.1331  val_top1=0.7250  val_macroF1=0.7184
+[Epoch 20] train_loss=0.1283  val_top1=0.7224  val_macroF1=0.7194
+
+[LoRA] Valutazione finale su valid/test...
+[LoRA] val_top1=0.7224  val_macroF1=0.7194
+[LoRA] test_top1=0.7379  test_macroF1=0.7369
+
+[LoRA] Salvato stato LoRA in: /work/cvcs2025/carpaneto_salsi_serafini/lora_runs/lora_ViT-B-32_openai_r8_a16.pt
+
+[NOTE] L'avviso QuickGELU di open_clip è innocuo; deriva da differenze tra il config del modello e il tag pretrain. Se ti dà noia, prova un tag alternativo (es. 'laion2b_s39b_b160k') o il flag --quick-test.
+[--INFO--] Job completato
+[--INFO--] Output salvato in /work/cvcs2025/carpaneto_salsi_serafini/lora_runs
