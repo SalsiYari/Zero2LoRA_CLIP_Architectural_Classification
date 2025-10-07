@@ -4,9 +4,6 @@
 # Con barre di caricamento (tqdm) per training ed evaluation
 # =========================================================
 '''
-NOTE!!
-Se lo lanci interattivo con srun, vedi tutto nel terminale (puoi fare python coop.py ... | tee run.log per salvarlo).
-Se lo lanci con sbatch, i log vanno nei file indicati da SLURM (--output/--error). Nel mio esempio erano logs/%x_%j.out e logs/%x_%j.err.
 
 Default principali
 --model ViT-B-32
@@ -19,14 +16,6 @@ Workers: --num-workers 0 → auto: usa SLURM_CPUS_PER_TASK (altrimenti 2)
 AMP: attivo (disattivi con --no-amp)
 Tiny-overfit di debug: disattivo (attivi con --limit-train N --epochs-overfit E)
 tqdm: attivo (disattivi con --no-tqdm)
-
-Con ViT-B/32, immagini 224px, modello gelato e solo prompt che impara:
-8 GB → funziona con --batch-train 16–32
-11–12 GB → --batch-train 32–64
-16 GB (consigliato) → --batch-train 64–128 comodo
-24 GB → --batch-train 128–256 sereno
-48 GB → batch molto grandi
-
 '''
 import os
 import sys
@@ -52,15 +41,6 @@ from sklearn.metrics import f1_score, classification_report, confusion_matrix
 from tqdm.auto import tqdm, trange
 
 BAR_FORMAT = "{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}]"
-'''
-{l_bar}: parte sinistra (descrizione + percentuale).
-{bar}: la barra grafica.
-{n_fmt}/{total_fmt}: step corrente/totale formattati.
-{elapsed}: tempo trascorso.
-{remaining}: tempo stimato rimanente.
-{rate_fmt}: velocità (iter/sec).
-Sarà passato come tqdm(..., bar_format=BAR_FORMAT).
-'''
 
 # === CONFIG: path dataset di default (puoi sovrascriverlo con --data) ===
 DATA_ROOT = "/work/cvcs2025/carpaneto_salsi_serafini/ArchiStyles-2"
