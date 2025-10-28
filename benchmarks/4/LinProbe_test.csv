@@ -1,0 +1,5 @@
+top1,top2,top3,F1_macro,eval_loss,Model,classifier,lr,weight_decay,batch_size
+0.7375,0.8793,0.9361,0.7363,0.7945,"ViT-B-32, openai",Linear,0.0371,0.0578,256
+0.8218,0.927,0.9593,0.821,0.571,"ViT-L-14, openai",Linear,0.026,0.05,256
+0.8589,0.9607,0.9818,0.8588,0.4448,"ViT-bigG-14-worldwide, metaclip2_worldwide",Linear,0.0462,0.0682,512
+0.8751,0.9558,0.9832,0.8746,0.4116,dinov3-vit7b16-pretrain-lvd1689m,Linear,0.0311,0.5867,32

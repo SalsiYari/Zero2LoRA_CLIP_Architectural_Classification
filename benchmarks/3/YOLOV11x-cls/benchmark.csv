@@ -1,0 +1,2 @@
+Model,Top-1 Acc,Top-2 Acc,Top-3 Acc,Macro-F1
+YOLOV11x-cls,0.7488,0.876,0.927,0.7459
