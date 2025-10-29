@@ -22,7 +22,8 @@
 
 from __future__ import annotations
 from image_encoders.ImageEncoder import ImageEncoder, ImageEncoderConfig    # My wrapper for Image Encoders
-from image_encoders.CLIP import CLIPImageEncoder                            # Inherits from ImageEncoder and it support all open_clip models
+from image_encoders.CLIP import CLIPImageEncoder                             # Inherits from ImageEncoder and it support all open_clip models
+from image_encoders.DINO import DinoV3ImageEncoder
 from GenericModels import BaseModel, ModelConfig, TrainingConfig, Metrics, Experiment   # Parent class for all Classification models
 from TorchModels import MLP, MLPConfig, LRSchedulerConfig, OptimizerConfig, HiddenLayer, loss_w_func  # File that contains all torch Model (inherit from GenericModels), import the MLP
 from DatasetsUtils import SplittedDatasetConfig, DatasetConfig              # Configuration for dataset, handles both the ImageFolder and the Embeddings Dataset
@@ -37,6 +38,7 @@ from tqdm import tqdm
 import numpy as np          
 from dataclasses import dataclass
 import gc
+import pandas as pd
 
 
 # remove if you don't want almost any print to console
@@ -54,7 +56,7 @@ train_config = TrainingConfig(
     seed = 42,                              # To remove randomness, right now not well used and I don't insure consistency over runs
     early_stop = 60,                        # After how many epochs to stop training after not seeing any improvement in evaluation accuracy
     num_workers = 4,                        # num_workers for DataLoaders
-    device = torch.device(f"cuda" if torch.cuda.is_available() else "cpu"),    # device to use for all (embedding computing and training)
+    device = torch.device(f"cuda:1" if torch.cuda.is_available() else "cpu"),    # device to use for all (embedding computing and training)
     tqdm_progress = True,                   # enable/disable progress bars
     loggers= [],#[WandBLogge,FileLogger],  # do not use FileLogger before fixing it, files don't get saved and the way the lcoations are defined is bad (find better generalization/definition)
     project_name= "ArchitecturalStyles") # project_name is for loggers
@@ -81,10 +83,10 @@ DATASETS_BASE_PATH: str = os.path.join(script_dir,"../datasets/")
 
 DATASETS_CONFIGS: list[DatasetConfig]=[
    # SplittedDatasetConfig(name="ArchiStyles", dataset_root_path=os.path.join(DATASETS_BASE_PATH,"ArchiStyles"), ),
-    SplittedDatasetConfig(name="architectural-styles-dataset-spl",dataset_root_path=os.path.join(DATASETS_BASE_PATH,"architectural-styles-dataset-spl"), preprocessing = None,),# desired_splits={"train": 0.84,"valid": 0.08,"test": 0.08} , oversampling=False),
-    SplittedDatasetConfig(name="architectural-styles-dataset-spl-black-pad",dataset_root_path=os.path.join(DATASETS_BASE_PATH,"architectural-styles-dataset-spl-black-pad"), preprocessing = None,),# desired_splits={"train": 0.84,"valid": 0.08,"test": 0.08} , oversampling=False),
-    SplittedDatasetConfig(name="architectural-styles-dataset-spl-warped",dataset_root_path=os.path.join(DATASETS_BASE_PATH,"architectural-styles-dataset-spl-warped"), preprocessing = None,),# desired_splits={"train": 0.84,"valid": 0.08,"test": 0.08} ,oversampling=False),
-    SplittedDatasetConfig(name="architectural-styles-dataset-spl-warp-lanczos",dataset_root_path=os.path.join(DATASETS_BASE_PATH,"architectural-styles-dataset-spl-warped"), preprocessing = None,),# desired_splits={"train": 0.84,"valid": 0.08,"test": 0.08} ,oversampling=False),
+    # SplittedDatasetConfig(name="architectural-styles-dataset-spl",dataset_root_path=os.path.join(DATASETS_BASE_PATH,"architectural-styles-dataset-spl"), preprocessing = None,),
+    # SplittedDatasetConfig(name="architectural-styles-dataset-spl-black-pad",dataset_root_path=os.path.join(DATASETS_BASE_PATH,"architectural-styles-dataset-spl-black-pad"), preprocessing = None,),
+    # SplittedDatasetConfig(name="architectural-styles-dataset-spl-warped",dataset_root_path=os.path.join(DATASETS_BASE_PATH,"architectural-styles-dataset-spl-warped"), preprocessing = None,),
+    SplittedDatasetConfig(name="architectural-styles-dataset-spl-warp-lanczos",dataset_root_path=os.path.join(DATASETS_BASE_PATH,"architectural-styles-dataset-spl-warped"), preprocessing = None,),
 
 ]
 
@@ -110,8 +112,9 @@ EMBEDDINGS_CACHE_DIR = os.path.join(script_dir,"./.cache/")
 
 # I decided to use ImageEncoderConfig because otherwise all the encoders would be initialized and loaded using a lot of memory
 ENCODERS_CONFIGS : list[ImageEncoderConfig] = [     # List of the Encoders to try
-    #ImageEncoderConfig(CLIPImageEncoder, {"CLIP_name":"ViT-B-32","Pretrained":"openai"}),
-    ImageEncoderConfig(CLIPImageEncoder, {"CLIP_name":"ViT-bigG-14-worldwide","Pretrained":"metaclip2_worldwide"}),
+    #ImageEncoderConfig(CLIPImageEncoder, {"CLIP_name":"ViT-L-14","Pretrained":"openai"}),
+    #ImageEncoderConfig(CLIPImageEncoder, {"CLIP_name":"ViT-bigG-14-worldwide","Pretrained":"metaclip2_worldwide"}),
+    ImageEncoderConfig(DinoV3ImageEncoder,{"model_name": "dinov3-vit7b16-pretrain-lvd1689m" }),
 ]
 
 @dataclass
@@ -127,12 +130,17 @@ scheduler_config = LRSchedulerConfig( torch.optim.lr_scheduler.CosineAnnealingLR
 L = HiddenLayer         # to use less space   # defines the hidden layer size and it's activation function
 
 CLASSIFIER_CONFIGS: list[Experiment] = [        # List of the classifiers and classifiers configs to try
-    Experiment(MLP, [
-                MLPConfig( hidden_layers = [L(896,torch.nn.ReLU), L(112,torch.nn.ReLU)],  loss_func= torch.nn.CrossEntropyLoss, optimizer= OptimizerConfig( torch.optim.AdamW,{"lr":0.0035, "weight_decay":0.187}), dropout_rate= 0.25, batch_size= 32 , loss_weights_func= loss_w_func, lr_sched= scheduler_config),
-                MLPConfig( hidden_layers = [L(1280,torch.nn.ReLU),L(1120,torch.nn.ReLU)], loss_func= torch.nn.CrossEntropyLoss, optimizer= OptimizerConfig( torch.optim.AdamW,{"lr":0.0061, "weight_decay":0.138}), dropout_rate= 0.5,  batch_size= 64 , loss_weights_func= loss_w_func, lr_sched= scheduler_config ),
-                MLPConfig( hidden_layers = [L(1280,torch.nn.ReLU),L(480,torch.nn.GELU)],  loss_func= torch.nn.CrossEntropyLoss, optimizer= OptimizerConfig( torch.optim.AdamW,{"lr":0.009,  "weight_decay":0.137}), dropout_rate= 0.53, batch_size= 256, loss_weights_func= loss_w_func, lr_sched= scheduler_config),
-                MLPConfig( hidden_layers = [L(1152,torch.nn.ReLU),L(144,torch.nn.ReLU)],  loss_func= torch.nn.CrossEntropyLoss, optimizer= OptimizerConfig( torch.optim.AdamW,{"lr":0.0071, "weight_decay":0.116}), dropout_rate= 0.33, batch_size= 64 , loss_weights_func= loss_w_func, lr_sched= scheduler_config),
-                 ]),
+    Experiment(MLP, [ # In this example they are Linear models as there are no hidden layers
+                MLPConfig( hidden_layers = [],  loss_func= torch.nn.CrossEntropyLoss, optimizer= OptimizerConfig( torch.optim.AdamW,{"lr":0.0311, "weight_decay":0.5867}), dropout_rate= 0.0, batch_size= 32 , loss_weights_func= loss_w_func, lr_sched= scheduler_config),
+                MLPConfig( hidden_layers = [],  loss_func= torch.nn.CrossEntropyLoss, optimizer= OptimizerConfig( torch.optim.AdamW,{"lr":0.0320, "weight_decay":0.5638}), dropout_rate= 0.0, batch_size= 32 , loss_weights_func= loss_w_func, lr_sched= scheduler_config),
+                MLPConfig( hidden_layers = [],  loss_func= torch.nn.CrossEntropyLoss, optimizer= OptimizerConfig( torch.optim.AdamW,{"lr":0.0486, "weight_decay":0.5635}), dropout_rate= 0.0, batch_size= 64 , loss_weights_func= loss_w_func, lr_sched= scheduler_config),
+                ]),
+    # Experiment(MLP, [
+    #             MLPConfig( hidden_layers = [L(896,torch.nn.ReLU), L(112,torch.nn.ReLU)],  loss_func= torch.nn.CrossEntropyLoss, optimizer= OptimizerConfig( torch.optim.AdamW,{"lr":0.0035, "weight_decay":0.187}), dropout_rate= 0.25, batch_size= 32 , loss_weights_func= loss_w_func, lr_sched= scheduler_config),
+    #             MLPConfig( hidden_layers = [L(1280,torch.nn.ReLU),L(1120,torch.nn.ReLU)], loss_func= torch.nn.CrossEntropyLoss, optimizer= OptimizerConfig( torch.optim.AdamW,{"lr":0.0061, "weight_decay":0.138}), dropout_rate= 0.5,  batch_size= 64 , loss_weights_func= loss_w_func, lr_sched= scheduler_config ),
+    #             MLPConfig( hidden_layers = [L(1280,torch.nn.ReLU),L(480,torch.nn.GELU)],  loss_func= torch.nn.CrossEntropyLoss, optimizer= OptimizerConfig( torch.optim.AdamW,{"lr":0.009,  "weight_decay":0.137}), dropout_rate= 0.53, batch_size= 256, loss_weights_func= loss_w_func, lr_sched= scheduler_config),
+    #             MLPConfig( hidden_layers = [L(1152,torch.nn.ReLU),L(144,torch.nn.ReLU)],  loss_func= torch.nn.CrossEntropyLoss, optimizer= OptimizerConfig( torch.optim.AdamW,{"lr":0.0071, "weight_decay":0.116}), dropout_rate= 0.33, batch_size= 64 , loss_weights_func= loss_w_func, lr_sched= scheduler_config),
+    #              ]),
     # Experiment for different Classifier ......
 ]
 
@@ -208,7 +216,7 @@ def compute_embeddings(ds: VisionDataset,                 # Function to compute 
     img_labels = torch.cat(img_labels, dim=0).long() # Same but also convert to long (integer)
     
     # Next lines clean the memory of both the GPU and the RAM
-    img_enc = img_enc.to('cpu')
+    img_enc = img_enc.to(torch.device('cpu'))
     torch.cuda.empty_cache()
     del dl
     gc.collect()
@@ -302,8 +310,19 @@ for dconf in DATASETS_CONFIGS:          # for each dataset
                     for logger in loggers:
                         logger.finish()
 
-            
-
+                test_metrics = classifier.evaluate(X=dconf.emb_splits["test"][0],y=dconf.emb_splits["test"][1], loggers=[]).to_dict
+                test_metrics['Model'] = enc_info.model_name
+                test_metrics['classifier']= 'Multi Layer Perceptron'
+                test_metrics|= classifier.conf.to_dict["optimizer"]['params']
+                test_metrics['batch_size']=classifier.conf.to_dict['batch_size']
+                df = pd.DataFrame([test_metrics])
+                CSV_PATH = "benchmark.csv"
+                if os.path.exists(CSV_PATH):
+                    old = pd.read_csv(CSV_PATH)
+                    out = pd.concat([old, df], ignore_index=True)
+                else:
+                    out = df.copy()
+                out.to_csv(CSV_PATH, index=False)
 
 logging.info("Everything finished, script end")
 

@@ -82,7 +82,9 @@ dataset_config =  SplittedDatasetConfig(name="architectural-styles-dataset-spl-w
 
 
 # Configuration to use to create the encoder, see ImageEncoder API if you want more details
-enc_config = ImageEncoderConfig(CLIPImageEncoder, {"CLIP_name":"ViT-bigG-14-worldwide","Pretrained":"metaclip2_worldwide"})
+#ImageEncoderConfig(CLIPImageEncoder, {"CLIP_name":"ViT-L-14","Pretrained":"openai"}),
+#ImageEncoderConfig(CLIPImageEncoder, {"CLIP_name":"ViT-bigG-14-worldwide","Pretrained":"metaclip2_worldwide"}),
+ImageEncoderConfig(DinoV3ImageEncoder,{"model_name": "dinov3-vit7b16-pretrain-lvd1689m" }),
 
 # Configurations specific to MLP
 scheduler = LRSchedulerConfig( torch.optim.lr_scheduler.CosineAnnealingLR , {"T_max":150})      # Learning rate sheduler, decreases the learning rate over the run
@@ -91,7 +93,8 @@ hidden_layers = hidden_layers=[HiddenLayer(1280,torch.nn.ReLU),HiddenLayer(480,t
 
 # Configuration of the Experiment (One experiment allows to test the classifier with a list of configurations)
 classifier_exp = Experiment(MLP, [MLPConfig(hidden_layers=hidden_layers, loss_func=torch.nn.CrossEntropyLoss, optimizer= optimizer, dropout_rate=0.53, batch_size=256 ,loss_weights_func=loss_w_func, lr_sched=scheduler)])
-
+# In this example they are Linear models as there are no hidden layers
+#Experiment(MLP, [ MLPConfig( hidden_layers = [],  loss_func= torch.nn.CrossEntropyLoss, optimizer= OptimizerConfig( torch.optim.AdamW,{"lr":0.0311, "weight_decay":0.5867}), dropout_rate= 0.0, batch_size= 32 , loss_weights_func= loss_w_func, lr_sched= scheduler_config),
 
 
 

@@ -246,3 +246,7 @@ def loss_w_func(y : torch.Tensor) -> torch.Tensor:
     a = y.bincount()
     w = 1/a
     return w / w.mean()
+
+
+
+
