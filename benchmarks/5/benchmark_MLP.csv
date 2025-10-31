@@ -1,0 +1,23 @@
+top1;top2;top3;F1_macro;eval_loss;Model;classifier;lr;weight_decay;batch_size;hidden_layers;dropout_rate
+0.7789;0.8961;0.9382;0.7775;0.8759;ViT-B-32, openai;Multi Layer Perceptron;0.0071;0.7997;512;"[(1280, ""<class 'torch.nn.modules.activation.ReLU'>""), (1280, ""<class 'torch.nn.modules.activation.ReLU'>"")]";0.3578
+0.8702;0.9523;0.9733;0.8697;0.4866;ViT-bigG-14-worldwide, metaclip2_worldwide;Multi Layer Perceptron;0.0133;0.1289;512;"[(1024, ""<class 'torch.nn.modules.activation.ReLU'>""), (384, ""<class 'torch.nn.modules.activation.ReLU'>"")]";0.7702
+0.8428;0.9347;0.9593;0.8420;0.6998;ViT-L-14, openai;Multi Layer Perceptron;0.007;0.2313;128;"[(896, ""<class 'torch.nn.modules.activation.ReLU'>""), (896, ""<class 'torch.nn.modules.activation.ReLU'>"")]";0.4826
+0.8751;0.9516;0.9747;0.8742;0.7391;dinov3-vit7b16-pretrain-lvd1689m;Multi Layer Perceptron;0.0045;0.0924;512;"[(1024, ""<class 'torch.nn.modules.activation.ReLU'>""), (128, ""<class 'torch.nn.modules.activation.ReLU'>"")]";0.6944
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
