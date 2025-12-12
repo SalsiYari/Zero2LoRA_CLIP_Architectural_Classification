@@ -1,0 +1,7 @@
+Model,Number of params,Formatted
+"ViT-L-14, openai",303966208,304.0M
+"ViT-B-32, openai",87849216,87.8M
+"ViT-bigG-14-worldwide, metaclip2_worldwide",1844907264,1.8B
+dinov3-vit7b16-pretrain-lvd1689m,6716035072,6.7B
+"ViT-SO400M-14-SigLIP-378, webli",428225600,428.2M
+"ViT-bigG-14-CLIPA, datacomp1b",1844903936,1.8B
