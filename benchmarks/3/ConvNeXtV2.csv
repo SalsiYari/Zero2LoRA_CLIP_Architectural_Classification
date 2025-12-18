@@ -1,0 +1,2 @@
+Model,Top-1 Acc,Top-2 Acc,Top-3 Acc,Macro F1
+convnextv2_huge.fcmae_ft_in22k_in1k_384,0.8035,0.9200,0.9565,0.8022
