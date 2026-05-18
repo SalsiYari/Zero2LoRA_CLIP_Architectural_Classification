@@ -1,3 +1,0 @@
-Model,Top-1 Acc,Macro-F1,Top-5 Acc,Balanced Acc,GPU-h,Latency (ms/img),Effort umano (h),Note
-DINOv2-B + LogReg(lbfgs),0.6747311827956989,0.6750038184879508,0.9422043010752689,0.6788594316539737,0.0496426608827379,0.118989497423172,~3,Linear probe su feature vit_base_patch16_224.dino; dataset locale; cache feature; solver lbfgs; C=0.1
-

@@ -1,9 +1,0 @@
-Timestamp;Model;Pretrained;Scenario;Techniques;Top-1 Acc;Macro-F1;Top-5 Acc;GPU-h;Latency (ms/img);Effort umano (h);Note;Classes;Batch size;Balanced Acc
-2025-08-21T09:21:50.842029;ViT-B-32;openai;Zero-shot (test);Prompt ensemble + temperature search;0.4987;0.4903;0.8656;0.0;2.7;0.5;zero-shot baseline B/32 with prompt ensemble + temperature grid;25;64;
-2025-08-20T14:30:09.776641;ViT-L-14;openai;Zero-shot (test);Prompt ensemble + temperature search;0.578;0.5636;0.8777;0.0;43.0;0.5;zero-shot baseline L/14 with prompt ensemble + temperature grid;25;64;
-2025-08-21T09:46:30.646790;ViT-L-14-336;openai;Zero-shot (test);Prompt ensemble + temperature search;0.5954;0.5822;0.8723;0.0;105.8;0.5;zero-shot L/14@336,prompt ensemble + temp search;25;32;0.6091
-2025-08-21T12:01:23;ViT-B-16-SigLIP;webli;Zero-shot (test);Prompt ensemble + temperature search;0.5578;0.5446;0.9247;0.0;10.9;0.5;SigLIP-B zero-shot, prompt ensemble + temperature search;25;32;0.5658
-2025-08-21T10:56:47.195384;ViT-L-16-SigLIP2-384;webli;Zero-shot (test);Prompt ensemble + temperature search;0.6976;0.6933;0.9624;0.0;108.9;0.5;SigLIP-L zero-shot with prompt ensemble + temperature grid;25;32;0.6962
-2025-08-22T17:10:52+02:00;DINOv2-B + LogReg (lbfgs);Facebook/dinov2 (timm);Linear-probe (test);Feature extraction (ViT-B/16 DINOv2) + StandardScaler + LogisticRegression (solver=lbfgs, multinomial, grid C=[0.1, 1.0]);0.6747;0.6750;0.9422;0.0496;0.1190;~3;"Linear probe su feature vit_base_patch16_224.dino; best C=0.1";25;64;0.6789
-2025-8-23 10:55:36;EVA02-L-14-336;merged2b_s6b_b61k;Zero-shot (test);Prompt ensemble + temperature search;0.6613;0.6595;0.9395;0;117.7;0.05;EVA-CLIP L/14 zero-shot, prompt ensemble + temperature grid;25;32;
-
