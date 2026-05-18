@@ -1,0 +1,10 @@
+model,pretrained,mode,n_ctx,batch_train,top1_or_acc,macro_f1,log_file
+ViT-B-32,laion2b_s34b_b79k,shared,16,128,0.48,0.4397,/work/cvcs2025/carpaneto_salsi_serafini/ArClip/CoOp/coop_outputs/final_test/log_shared_ViT-B-32_20251020_220828.txt
+ViT-L-14,laion2b_s32b_b82k,shared,16,64,0.5586,0.5411,/work/cvcs2025/carpaneto_salsi_serafini/ArClip/CoOp/coop_outputs/final_test/log_shared_ViT-L-14_20251020_221934.txt
+ViT-H-14,laion2b_s32b_b79k,shared,16,32,0.5649,0.5322,/work/cvcs2025/carpaneto_salsi_serafini/ArClip/CoOp/coop_outputs/final_test/log_shared_ViT-H-14_20251020_223035.txt
+ViT-B-32,laion2b_s34b_b79k,per_class,16,128,0.48,0.4397,/work/cvcs2025/carpaneto_salsi_serafini/ArClip/CoOp/coop_outputs/final_test/log_per_class_ViT-B-32_20251020_224821.txt
+ViT-bigG-14,laion2b_s39b_b160k,shared,16,8,0.6147,0.5955,/work/cvcs2025/carpaneto_salsi_serafini/ArClip/CoOp/coop_outputs/final_test/log_shared_ViT-bigG-14_20251020_223336.txt
+ViT-L-14,laion2b_s32b_b82k,per_class,16,64,0.5586,0.5411,/work/cvcs2025/carpaneto_salsi_serafini/ArClip/CoOp/coop_outputs/final_test/log_per_class_ViT-L-14_20251021_003625.txt
+ViT-H-14,laion2b_s32b_b79k,per_class,16,32,0.5649,0.5322,/work/cvcs2025/carpaneto_salsi_serafini/ArClip/CoOp/coop_outputs/final_test/log_per_class_ViT-H-14_20251021_004816.txt
+ViT-g-14,laion2b_s34b_b88k,per_class,16,24,0.5628,0.5343,/work/cvcs2025/carpaneto_salsi_serafini/ArClip/CoOp/coop_outputs/final_test/log_per_class_ViT-g-14_20251021_005542.txt
+ViT-bigG-14,laion2b_s39b_b160k,per_class,16,8,0.6119,0.593,/work/cvcs2025/carpaneto_salsi_serafini/ArClip/CoOp/coop_outputs/final_test/log_per_class_ViT-bigG-14_20251021_010543.txt
